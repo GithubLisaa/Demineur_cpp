@@ -1,4 +1,7 @@
 # Demineur (Projet Gtech 1)
+
+![jeu](https://demineur.nhtdev.com/img/help/capture.png)
+
 **Règles:**
 
 -l'utilisateur choisi une case
