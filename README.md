@@ -4,7 +4,7 @@
 
 **Règles:**
 
--l'utilisateur choisi une case
+-l'utilisateur choisi une case "inconnu" ![case](https://demineur.nhtdev.com/img/help/empty.png)
 
 -placement aléatoire des bombes, placement de bombes interdit autour de 3 cases de la case choisi par le joueur
 
