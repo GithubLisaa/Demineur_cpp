@@ -10,3 +10,5 @@
 -possibilité de placer un drapeau sur n'importe quelle case ainsi que de supprimer n'importe quel drapeau déjà placer, si toute les case de bombes ont un drapeau, fin de partie gagner
 
 -afficher le nombres total de bombe et un timer si possible
+
+[Pour plus d'info](https://www.regles-de-jeux.com/regle-du-demineur/)
