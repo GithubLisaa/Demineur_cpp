@@ -1,7 +1,5 @@
-# Demineur
- Projet Gtech 1
- 
-Règles:
+# Demineur (Projet Gtech 1)
+# Règles:
 
 -l'utilisateur choisi une case, placement de bombes interdit autour de 3 cases de la case choisi
 
