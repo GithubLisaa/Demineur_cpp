@@ -6,6 +6,7 @@
 -placement aléatoire des bombes, placement de bombes interdit autour de 3 cases de la case choisi par le joueur
 
 -si une case est cliquer(si bombe => fin de partie perdu afficher toute les bombes, si pas bombe => remplace la case par le nombre de bombe au alentours(si pas de case au alentour => révéler les case au alentours))
+![type1](https://demineur.nhtdev.com/img/help/num-1.png) ![type2](https://demineur.nhtdev.com/img/help/num-2.png) ![type3](https://demineur.nhtdev.com/img/help/num-3.png)
 
 ![case](https://delphi.developpez.com/defi/demineur/defieur/images/defi_html_556d4f95.gif)
 
