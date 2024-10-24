@@ -9,8 +9,6 @@
 
 ![type1](https://demineur.nhtdev.com/img/help/num-1.png) ![type2](https://demineur.nhtdev.com/img/help/num-2.png) ![type3](https://demineur.nhtdev.com/img/help/num-3.png)
 
-![case](https://delphi.developpez.com/defi/demineur/defieur/images/defi_html_556d4f95.gif)
-
 -possibilité de placer un drapeau sur n'importe quelle case ainsi que de supprimer n'importe quel drapeau déjà placer, si toute les case de bombes ont un drapeau, fin de partie gagner
 
 ![placementD](https://coolmathgames.com/sites/default/files/2021-02/patternms2.gif)
