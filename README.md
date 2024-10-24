@@ -6,7 +6,7 @@
 
 -l'utilisateur choisi une case "inconnu" ![case](https://demineur.nhtdev.com/img/help/empty.png)
 
--placement aléatoire des bombes, placement de bombes interdit autour de 3 cases de la case choisi par le joueur
+-placement aléatoire des bombes, placement de bombes interdit autour de 3 cases de la première case choisi par le joueur
 
 -si une case est cliquer(si bombe => fin de partie perdu afficher toute les bombes, si pas bombe => remplace la case par le nombre de bombe au alentours(si pas de case au alentour => révéler les case au alentours))
 
