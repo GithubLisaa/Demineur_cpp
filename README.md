@@ -14,7 +14,7 @@
 
 -possibilité de placer un drapeau sur n'importe quelle case ainsi que de supprimer n'importe quel drapeau déjà placer, si toute les case de bombes ont un drapeau, fin de partie gagner
 
-![placementD](https://coolmathgames.com/sites/default/files/2021-02/patternms2.gif)
+![placementD](https://demineur.nhtdev.com/img/help/ex1.png)
 
 -afficher le nombres total de bombe et un timer si possible
 
