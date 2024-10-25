@@ -12,10 +12,13 @@
 
 ![type1](https://demineur.nhtdev.com/img/help/num-1.png) ![type2](https://demineur.nhtdev.com/img/help/num-2.png) ![type3](https://demineur.nhtdev.com/img/help/num-3.png)
 
--possibilité de placer un drapeau sur n'importe quelle case "inconnu" ainsi que de supprimer n'importe quel drapeau déjà placer, si toute les case de bombes ont un drapeau, fin de partie gagner
+-possibilité de placer un drapeau sur n'importe quelle case "inconnu" ainsi que de supprimer n'importe quel drapeau déjà placer
 
 ![placementD](https://demineur.nhtdev.com/img/help/ex1.png)
 
 -afficher le nombres total de bombe et un timer si possible
+
+-partie gagner une fois que toute les cases dans mines sont révèler
+
 
 [Pour plus d'info](https://demineur.nhtdev.com/fr/rules)
