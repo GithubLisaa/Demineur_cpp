@@ -11,7 +11,7 @@ struct celldata {
 	int minesaround;
 };
 
-celldata gameboard[100][100];
+celldata gameboard[9999][9999];
 
 enum bschoices {
 	PETIT = 10,
@@ -19,6 +19,13 @@ enum bschoices {
 	GRAND = 24
 };
 
+int celltofind = 0;
+int cellfinds = 0;
+int boardsize = 0;
+int x = 0;
+int y = 0;
+int nbminemod = 0;
+bool ismodded = false;
 
 float gennbint(int nb1, int nb2) {
 	return floor(nb1 + ((rand() / (float)RAND_MAX) * nb2));
@@ -42,7 +49,7 @@ void color(int color) {
 	}
 }
 
-void cheatshowmine(int boardsize) {
+void cheatshowmine() {
 	int nbmineonboard = 0;
 	for (int y = 0; y < boardsize; y++)
 	{
@@ -68,22 +75,28 @@ void cheatshowmine(int boardsize) {
 	cout << nbmineonboard << " mines" << endl;
 }
 
-void iniboard(int boardsize) {
+void iniboard() {
 	int totalmine = 0;
 
-	switch (boardsize)
+	if (ismodded) {
+		totalmine = nbminemod;
+	}
+	else
 	{
-	case 10:
-		totalmine = 10;
-		break;
-	case 18:
-		totalmine = 40;
-		break;
-	case 24:
-		totalmine = 99;
-		break;
-	default:
-		break;
+		switch (boardsize)
+		{
+		case 10:
+			totalmine = 10;
+			break;
+		case 18:
+			totalmine = 40;
+			break;
+		case 24:
+			totalmine = 99;
+			break;
+		default:
+			break;
+		}
 	}
 
 	for (int i = 0; i < totalmine; i++)
@@ -133,7 +146,8 @@ void iniboard(int boardsize) {
 	}
 }
 
-void afboard(int boardsize) {
+void afboard() {
+	cellfinds = 0;
 	for (int y = 0; y < boardsize; y++)
 	{
 		for (int x = 0; x < boardsize; x++)
@@ -144,9 +158,11 @@ void afboard(int boardsize) {
 					color(2);
 					cout << "[" << gameboard[y][x].minesaround << "]";
 					color(4);
+					cellfinds++;
 				}
 				else {
 					cout << "[" << " " << "]";
+					cellfinds++;
 				}
 			}
 			else if (gameboard[y][x].flaged) {
@@ -162,7 +178,24 @@ void afboard(int boardsize) {
 	}
 }
 
-void editcell(int boardsize, int type, int x, int y) {
+void checkcell(int x, int y) {
+	for (int i = -1; i <= 1; ++i) {
+		for (int j = -1; j <= 1; ++j) {
+			if (y + i >= 0 && y + i < boardsize && x + j >= 0 && x + j < boardsize) {
+				if (gameboard[y + i][x + j].minesaround == 0 && !gameboard[y + i][x + j].revealed)
+				{
+					gameboard[y + i][x + j].revealed = true;
+					checkcell(x + j, y + i);
+				}
+				if (!gameboard[y + i][x + j].mine) {
+					gameboard[y + i][x + j].revealed = true;
+				}
+			}
+		}
+	}
+}
+
+bool editcell(int type) {
 	if (x > boardsize) {
 		x = boardsize - 1;
 	}
@@ -175,6 +208,7 @@ void editcell(int boardsize, int type, int x, int y) {
 	else if (y < 0) {
 		y = 0;
 	}
+
 	switch (type)
 	{
 	case 1:
@@ -188,7 +222,38 @@ void editcell(int boardsize, int type, int x, int y) {
 		}
 		break;
 	case 2:
+		if (gameboard[y][x].mine == true) {
+			color(1);
+			cout << "Game Over" << endl;
+			color(4);
+			for (int y = 0; y < boardsize; y++)
+			{
+				for (int x = 0; x < boardsize; x++)
+				{
+					if (gameboard[y][x].mine)
+					{
+						color(1);
+						cout << "[" << "*" << "]";
+						color(4);
+					}
+					else
+					{
+						cout << "[" << " " << "]";
+					}
+				}
+				cout << endl;
+			}
+			return true;
+			break;
+		}
+		else {
+			checkcell(x, y);
+		}
+		return false;
+		break;
+	case 3:
 		gameboard[y][x].revealed = true;
+		break;
 	default:
 		break;
 	}
@@ -198,18 +263,16 @@ int main()
 {
 	srand(time(NULL));
 
-	int boardsize = 0;
 	int taille = 0;
 	int select = 0;
-	int x = 0;
-	int y = 0;
+	bool end = false;
 	bool firstsele = true;
 
 	gennbint(0, 0);
 	gennbint(0, 0);
 	gennbint(0, 0);
 
-	cout << "Entrer une taille de tableau:\n1. PETIT\n2. MOYEN\n3. GRAND\n> ";
+	cout << "Entrer une taille de tableau:\n1. Petit (10*10)\n2. Moyen (18*18)\n3. Grand (24*24)\n4. Moddee\n> ";
 	cin >> taille;
 
 	switch (taille)
@@ -223,50 +286,117 @@ int main()
 	case 3:
 		boardsize = GRAND;
 		break;
+	case 4:
+		char seeda;
+		int seedmod;
+		int maxmines;
+		ismodded = true;
+		cout << "Entrer votre taille de tableau personnalisee (max 9999*9999, min 6*6)\n> ";
+		cin >> boardsize;
+		if (boardsize > 9999) {
+			boardsize = 9999;
+		}
+		else if (boardsize < 6) {
+			boardsize = 6;
+		}
+		maxmines = boardsize * boardsize - 25;
+		cout << "Entrer votre nombre de mines, max " << maxmines << "\n> ";
+		cin >> nbminemod;
+		if (nbminemod > maxmines) {
+			nbminemod = maxmines;
+		}
+		cout << "Voulez vous rentrer une seed custom ? (y/n)\n> ";
+		cin >> seeda;
+		if (seeda == 'y') {
+			cout << "Entrer votre seed\n> ";
+			cin >> seedmod;
+			srand(seedmod);
+		}
+		break;
 	default:
+		color(1);
 		cout << "Erreur, element choisi incorrect";
+		color(4);
 		break;
 	}
 
-	while (true)
+	switch (boardsize)
 	{
-		cout << endl << "Demineur\n1. Afficher le tableau\n2. Decouvrire une case\n3. Poser un drapeau\n>  ";
-		cin >> select;
+	case 10:
+		celltofind = boardsize * boardsize - 10;
+		break;
+	case 18:
+		celltofind = boardsize * boardsize - 40;
+		break;
+	case 24:
+		celltofind = boardsize * boardsize - 99;
+		break;
+	default:
+		celltofind = boardsize * boardsize - nbminemod;
+		break;
+	}
 
-		switch (select)
-		{
-		case 1:
-			afboard(boardsize);
-			break;
-		case 2:
-			cout << "Entrer une coordonnee x et y\nEntrer x:\n> ";
-			cin >> x;
-			cout << "Entrer y:\n> ";
-			cin >> y;
-
-			if (firstsele) {
-				editcell(boardsize, 2, x - 1, y - 1);
-				iniboard(boardsize);
-				firstsele = false;
+	while (!end)
+	{
+		afboard();
+		if (!firstsele) {
+			if (celltofind - cellfinds == 0) {
+				color(3);
+				cout << "Bravo!\nfin de partie";
+				color(4);
+				end = true;
 			}
 			else
 			{
-				editcell(boardsize, 2, x - 1, y - 1);
+				cout << celltofind - cellfinds << " cases restantes a trouver\nVotre derniere entree etait en x: " << x + 1 << ", y: " << y + 1 << endl;
 			}
-			break;
-		case 3:
-			cout << "Entrer une coordonnee x et y\nEntrer x:\n> ";
-			cin >> x;
-			cout << "Entrer y:\n> ";
-			cin >> y;
-			editcell(boardsize, 1, x - 1, y - 1);
-			break;
-		case 4:
-			cheatshowmine(boardsize);
-			break;
-		default:
-			cout << "Erreur, saissie incorrect";
-			break;
+		}
+		if (!end)
+		{
+			color(3);
+			cout << endl << "Demineur" << endl;
+			color(4);
+			cout << "1. Decouvrire une case\n2. Poser un drapeau\n> ";
+			cin >> select;
+
+			switch (select)
+			{
+			case 1:
+				cout << "Entrer une coordonnee x et y:\nEntrer x:\n> ";
+				cin >> x;
+				cout << "Entrer y:\n> ";
+				cin >> y;
+				x--;
+				y--;
+				if (firstsele) {
+					editcell(3);
+					iniboard();
+					checkcell(x, y);
+					firstsele = false;
+				}
+				else
+				{
+					end = editcell(2);
+				}
+				break;
+			case 2:
+				cout << "Entrer une coordonnee x et y:\nEntrer x:\n> ";
+				cin >> x;
+				cout << "Entrer y:\n> ";
+				cin >> y;
+				x--;
+				y--;
+				editcell(1);
+				break;
+			case 3:
+				cheatshowmine();
+				break;
+			default:
+				color(1);
+				cout << "Erreur, saissie incorrect" << endl << endl;
+				color(4);
+				break;
+			}
 		}
 	}
 }
