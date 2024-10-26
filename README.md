@@ -4,6 +4,7 @@
 
 
 [cliquez ici pour voir le code](https://github.com/GithubLisaa/Demineur_cpp/blob/main/D%C3%A9mineur/D%C3%A9mineur.cpp)
+
 **Règles:**
 
 -l'utilisateur choisi une case "inconnu" ![case](https://demineur.nhtdev.com/img/help/empty.png)
