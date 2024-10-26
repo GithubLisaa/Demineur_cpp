@@ -1,4 +1,4 @@
-# Demineur (Projet Gtech 1)
+# [Demineur (Projet Gtech 1)](https://github.com/GithubLisaa/Demineur_cpp/blob/main/D%C3%A9mineur/D%C3%A9mineur.cpp)
 
 ![jeu](https://demineur.nhtdev.com/img/help/capture.png)
 
