@@ -42,7 +42,7 @@ void color(int color) {
 	}
 }
 
-void tempshowmine(int boardsize) {
+void cheatshowmine(int boardsize) {
 	int nbmineonboard = 0;
 	for (int y = 0; y < boardsize; y++)
 	{
@@ -53,7 +53,13 @@ void tempshowmine(int boardsize) {
 				cout << "[" << "*" << "]";
 				nbmineonboard++;
 			}
-			else {
+			else if (gameboard[y][x].minesaround > 0) {
+				color(2);
+				cout << "[" << gameboard[y][x].minesaround << "]";
+				color(4);
+			}
+			else
+			{
 				cout << "[" << " " << "]";
 			}
 		}
@@ -107,6 +113,22 @@ void iniboard(int boardsize) {
 		else
 		{
 			i--;
+		}
+	}
+
+	for (int y = 0; y < boardsize; y++)
+	{
+		for (int x = 0; x < boardsize; x++)
+		{
+			for (int j = -1; j <= 1 ; ++j) {
+				for (int k = -1; k <= 1; ++k) {
+					if (y + j >= 0 && y + j < boardsize && x + k >= 0 && x + k < boardsize) {
+						if (gameboard[y + j][x + k].mine) {
+							gameboard[y][x].minesaround++;
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -240,7 +262,7 @@ int main()
 			editcell(boardsize, 1, x - 1, y - 1);
 			break;
 		case 4:
-			tempshowmine(boardsize);
+			cheatshowmine(boardsize);
 			break;
 		default:
 			cout << "Erreur, saissie incorrect";
