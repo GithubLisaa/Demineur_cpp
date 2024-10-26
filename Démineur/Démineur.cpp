@@ -4,7 +4,7 @@
 
 using namespace std;
 
-struct celldata{
+struct celldata {
 	bool revealed;
 	bool mine;
 	bool flaged;
@@ -68,7 +68,7 @@ void cheatshowmine(int boardsize) {
 	cout << nbmineonboard << " mines" << endl;
 }
 
-void iniboard(int boardsize) { 
+void iniboard(int boardsize) {
 	int totalmine = 0;
 
 	switch (boardsize)
@@ -95,7 +95,7 @@ void iniboard(int boardsize) {
 
 		x = gennbint(0, boardsize);
 		y = gennbint(0, boardsize);
-		
+
 		for (int j = -2; j <= 2 && !breakoutfor; ++j) {
 			for (int k = -2; k <= 2 && !breakoutfor; ++k) {
 				if (y + j >= 0 && y + j < boardsize && x + k >= 0 && x + k < boardsize) {
@@ -120,7 +120,7 @@ void iniboard(int boardsize) {
 	{
 		for (int x = 0; x < boardsize; x++)
 		{
-			for (int j = -1; j <= 1 ; ++j) {
+			for (int j = -1; j <= 1; ++j) {
 				for (int k = -1; k <= 1; ++k) {
 					if (y + j >= 0 && y + j < boardsize && x + k >= 0 && x + k < boardsize) {
 						if (gameboard[y + j][x + k].mine) {
