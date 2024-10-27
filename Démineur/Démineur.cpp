@@ -57,7 +57,9 @@ void cheatshowmine() {
 		{
 			if (gameboard[y][x].mine)
 			{
+				color(1);
 				cout << "[" << "*" << "]";
+				color(4);
 				nbmineonboard++;
 			}
 			else if (gameboard[y][x].minesaround > 0) {
