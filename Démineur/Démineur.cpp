@@ -181,14 +181,76 @@ void afboard() {
 void checkcell(int x, int y) {
 	for (int i = -1; i <= 1; ++i) {
 		for (int j = -1; j <= 1; ++j) {
+			int combi = i * 10 + j;
 			if (y + i >= 0 && y + i < boardsize && x + j >= 0 && x + j < boardsize) {
-				if (gameboard[y + i][x + j].minesaround == 0 && !gameboard[y + i][x + j].revealed)
-				{
-					gameboard[y + i][x + j].revealed = true;
-					checkcell(x + j, y + i);
+				if (gameboard[y][x].minesaround == 0) {
+					if (gameboard[y + i][x + j].minesaround == 0 && !gameboard[y + i][x + j].revealed)
+					{
+						gameboard[y + i][x + j].revealed = true;
+						checkcell(x + j, y + i);
+						/*switch (combi) {
+						case 11:
+							if (gameboard[y + 1][x].minesaround == 0 || gameboard[y][x + 1].minesaround == 0) {
+								gameboard[y + i][x + j].revealed = true;
+								checkcell(x + j, y + i);
+							}
+							break;
+						case 9:
+							if (gameboard[y + 1][x].minesaround == 0 || gameboard[y][x - 1].minesaround == 0) {
+								gameboard[y + i][x + j].revealed = true;
+								checkcell(x + j, y + i);
+							}
+							break;
+						case -9:
+							if (gameboard[y - 1][x].minesaround == 0 || gameboard[y][x + 1].minesaround == 0) {
+								gameboard[y + i][x + j].revealed = true;
+								checkcell(x + j, y + i);
+							}
+							break;
+						case -11:
+							if (gameboard[y - 1][x].minesaround == 0 || gameboard[y][x - 1].minesaround == 0) {
+								gameboard[y + i][x + j].revealed = true;
+								checkcell(x + j, y + i);
+							}
+							break;
+						default:
+							gameboard[y + i][x + j].revealed = true;
+							checkcell(x + j, y + i);
+							break;
+						}*/
+					}
+					else if (!gameboard[y + i][x + j].mine) {
+						gameboard[y + i][x + j].revealed = true;
+						//switch (combi) {
+						//case 11: //1, 1
+						//	if (!gameboard[y + 1][x].mine && !gameboard[y][x + 1].mine) {
+						//		gameboard[y + i][x + j].revealed = true;
+						//	}
+						//	break;
+						//case 9: //1, -1
+						//	if (!gameboard[y + 1][x].mine && !gameboard[y][x - 1].mine) {
+						//		gameboard[y + i][x + j].revealed = true;
+						//	}
+						//	break;
+						//case -9://-1, 1
+						//	if (!gameboard[y - 1][x].mine && !gameboard[y][x + 1].mine) {
+						//		gameboard[y + i][x + j].revealed = true;
+						//	}
+						//	break;
+						//case -11://-1, -1
+						//	if (!gameboard[y - 1][x].mine && !gameboard[y][x - 1].mine) {
+						//		gameboard[y + i][x + j].revealed = true;
+						//	}
+						//	break;
+						//default:
+						//	gameboard[y + i][x + j].revealed = true;
+						//	break;
+						//}
+					}
 				}
-				if (!gameboard[y + i][x + j].mine) {
-					gameboard[y + i][x + j].revealed = true;
+				else
+				{
+					gameboard[y][x].revealed = true;
 				}
 			}
 		}
@@ -246,6 +308,12 @@ bool editcell(int type) {
 			return true;
 			break;
 		}
+		else if (gameboard[y][x].revealed == true)
+		{
+			color(1);
+			cout << "Erreur, case deja decouverte" << endl;
+			color(4);
+		}
 		else {
 			checkcell(x, y);
 		}
@@ -272,52 +340,55 @@ int main()
 	gennbint(0, 0);
 	gennbint(0, 0);
 
-	cout << "Entrer une taille de tableau:\n1. Petit (10*10)\n2. Moyen (18*18)\n3. Grand (24*24)\n4. Moddee\n> ";
-	cin >> taille;
+	for (int i = 0; i < 1; i++) {
+		cout << "Entrer une taille de tableau:\n1. Petit (10*10)\n2. Moyen (18*18)\n3. Grand (24*24)\n4. Moddee\n> ";
+		cin >> taille;
 
-	switch (taille)
-	{
-	case 1:
-		boardsize = PETIT;
-		break;
-	case 2:
-		boardsize = MOYEN;
-		break;
-	case 3:
-		boardsize = GRAND;
-		break;
-	case 4:
-		char seeda;
-		int seedmod;
-		int maxmines;
-		ismodded = true;
-		cout << "Entrer votre taille de tableau personnalisee (max 9999*9999, min 6*6)\n> ";
-		cin >> boardsize;
-		if (boardsize > 9999) {
-			boardsize = 9999;
+		switch (taille)
+		{
+		case 1:
+			boardsize = PETIT;
+			break;
+		case 2:
+			boardsize = MOYEN;
+			break;
+		case 3:
+			boardsize = GRAND;
+			break;
+		case 4:
+			char seeda;
+			int seedmod;
+			int maxmines;
+			ismodded = true;
+			cout << "Entrer votre taille de tableau personnalisee (max 9999*9999, min 6*6)\n> ";
+			cin >> boardsize;
+			if (boardsize > 9999) {
+				boardsize = 9999;
+			}
+			else if (boardsize < 6) {
+				boardsize = 6;
+			}
+			maxmines = boardsize * boardsize - 25;
+			cout << "Entrer votre nombre de mines, max " << maxmines << "\n> ";
+			cin >> nbminemod;
+			if (nbminemod > maxmines) {
+				nbminemod = maxmines;
+			}
+			cout << "Voulez vous rentrer une seed custom ? (y/n)\n> ";
+			cin >> seeda;
+			if (seeda == 'y') {
+				cout << "Entrer votre seed\n> ";
+				cin >> seedmod;
+				srand(seedmod);
+			}
+			break;
+		default:
+			color(1);
+			cout << endl << "Erreur, saissie incorrect" << endl << endl;
+			color(4);
+			i--;
+			break;
 		}
-		else if (boardsize < 6) {
-			boardsize = 6;
-		}
-		maxmines = boardsize * boardsize - 25;
-		cout << "Entrer votre nombre de mines, max " << maxmines << "\n> ";
-		cin >> nbminemod;
-		if (nbminemod > maxmines) {
-			nbminemod = maxmines;
-		}
-		cout << "Voulez vous rentrer une seed custom ? (y/n)\n> ";
-		cin >> seeda;
-		if (seeda == 'y') {
-			cout << "Entrer votre seed\n> ";
-			cin >> seedmod;
-			srand(seedmod);
-		}
-		break;
-	default:
-		color(1);
-		cout << "Erreur, element choisi incorrect";
-		color(4);
-		break;
 	}
 
 	switch (boardsize)
@@ -338,6 +409,7 @@ int main()
 
 	while (!end)
 	{
+		cout << endl;
 		afboard();
 		if (!firstsele) {
 			if (celltofind - cellfinds == 0) {
@@ -393,7 +465,7 @@ int main()
 				break;
 			default:
 				color(1);
-				cout << "Erreur, saissie incorrect" << endl << endl;
+				cout << endl << "Erreur, saissie incorrect" << endl;
 				color(4);
 				break;
 			}
