@@ -31,23 +31,26 @@ float gennbint(int nb1, int nb2) {
 	return floor(nb1 + ((rand() / (float)RAND_MAX) * nb2));
 }
 
-void color(int color) {
-	switch (color)
-	{
-	case 1:
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
-		break;
-	case 2:
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
-		break;
-	case 3:
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
-		break;
-	default:
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-		break;
-	}
-}
+//void color(int color) {
+//	switch (color)
+//	{
+//	case 1:
+//		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED);
+//		break;
+//	case 2:
+//		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN);
+//		break;
+//	case 3:
+//		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE);
+//		break;
+//	default:
+//		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+//		break;
+//	}
+//}
+
+//std::cout << "\033[<style>;<couleurtexte>;<background>mTexte\033[0m" << std::endl;
+
 
 void cheatshowmine() {
 	int nbmineonboard = 0;
@@ -57,19 +60,79 @@ void cheatshowmine() {
 		{
 			if (gameboard[y][x].mine)
 			{
-				color(1);
-				cout << "[" << "*" << "]";
-				color(4);
+				cout << "\033[1;31;102m[" << "*" << "]\033[0m";
 				nbmineonboard++;
 			}
-			else if (gameboard[y][x].minesaround > 0) {
-				color(2);
-				cout << "[" << gameboard[y][x].minesaround << "]";
-				color(4);
+			else if (gameboard[y][x].revealed) {
+				if (gameboard[y][x].minesaround > 0) {
+					switch (gameboard[y][x].minesaround)
+					{
+					case 1:
+						cout << "\033[1;34;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 2:
+						cout << "\033[1;32;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 3:
+						cout << "\033[1;31;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 4:
+						cout << "\033[1;95;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 5:
+						cout << "\033[1;33;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 6:
+						cout << "\033[1;36;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 7:
+						cout << "\033[1;30;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					default:
+						cout << "\033[1;90;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					}
+				}
+				else
+				{
+					cout << "\033[1;30;103m[" << " " << "]\033[0m";
+				}
 			}
 			else
 			{
-				cout << "[" << " " << "]";
+				if (gameboard[y][x].minesaround > 0) {
+					switch (gameboard[y][x].minesaround)
+					{
+					case 1:
+						cout << "\033[1;34;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 2:
+						cout << "\033[1;32;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 3:
+						cout << "\033[1;31;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 4:
+						cout << "\033[1;95;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 5:
+						cout << "\033[1;33;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 6:
+						cout << "\033[1;36;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 7:
+						cout << "\033[1;30;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					default:
+						cout << "\033[1;90;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					}
+				}
+				else
+				{
+					cout << "\033[1;30;102m[" << " " << "]\033[0m";
+				}
 			}
 		}
 		cout << endl;
@@ -157,23 +220,45 @@ void afboard() {
 			if (gameboard[y][x].revealed)
 			{
 				if (gameboard[y][x].minesaround > 0) {
-					color(2);
-					cout << "[" << gameboard[y][x].minesaround << "]";
-					color(4);
+					switch (gameboard[y][x].minesaround)
+					{
+					case 1:
+						cout << "\033[1;34;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 2:
+						cout << "\033[1;32;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 3:
+						cout << "\033[1;31;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 4:
+						cout << "\033[1;95;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 5:
+						cout << "\033[1;37;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 6:
+						cout << "\033[1;36;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					case 7:
+						cout << "\033[1;30;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					default:
+						cout << "\033[1;90;103m[" << gameboard[y][x].minesaround << "]\033[0m";
+						break;
+					}
 					cellfinds++;
 				}
 				else {
-					cout << "[" << " " << "]";
+					cout << "\033[1;30;103m[" << " " << "]\033[0m";
 					cellfinds++;
 				}
 			}
 			else if (gameboard[y][x].flaged) {
-				color(1);
-				cout << "[" << "F" << "]";
-				color(4);
+				cout << "\033[1;31;102m[" << "F" << "]\033[0m";
 			}
 			else {
-				cout << "[" << "?" << "]";
+				cout << "\033[1;30;102m[" << "?" << "]\033[0m";
 			}
 		}
 		cout << endl;
@@ -276,33 +361,34 @@ bool editcell(int type) {
 	switch (type)
 	{
 	case 1:
-		if (!gameboard[y][x].flaged)
+		if (!gameboard[y][x].flaged && !gameboard[y][x].revealed)
 		{
 			gameboard[y][x].flaged = true;
 		}
+		else if (!gameboard[y][x].revealed)
+		{
+
+			gameboard[y][x].flaged = false;
+		}
 		else
 		{
-			gameboard[y][x].flaged = false;
+			cout << endl << "\033[1;31mErreur, case deja decouverte\033[0m" << endl;
 		}
 		break;
 	case 2:
 		if (gameboard[y][x].mine == true) {
-			color(1);
-			cout << "Game Over" << endl;
-			color(4);
+			cout << "\033[1;31m[Game Over\033[0m" << endl;
 			for (int y = 0; y < boardsize; y++)
 			{
 				for (int x = 0; x < boardsize; x++)
 				{
 					if (gameboard[y][x].mine)
 					{
-						color(1);
-						cout << "[" << "*" << "]";
-						color(4);
+						cout << "\033[1;31;103mm[[" << "*" << "]\033[0m";
 					}
 					else
 					{
-						cout << "[" << " " << "]";
+						cout << "\033[1;30;103mm[[" << " " << "]\033[0m";
 					}
 				}
 				cout << endl;
@@ -312,9 +398,7 @@ bool editcell(int type) {
 		}
 		else if (gameboard[y][x].revealed == true)
 		{
-			color(1);
-			cout << "Erreur, case deja decouverte" << endl;
-			color(4);
+			cout << endl << "\033[1;31mErreur, case deja decouverte\033[0m" << endl;
 		}
 		else {
 			checkcell(x, y);
@@ -385,9 +469,7 @@ int main()
 			}
 			break;
 		default:
-			color(1);
-			cout << endl << "Erreur, saissie incorrect" << endl << endl;
-			color(4);
+			cout << endl << "\033[1;31mErreur, saissie incorrect\033[0m" << endl << endl;
 			i--;
 			break;
 		}
@@ -412,12 +494,9 @@ int main()
 	while (!end)
 	{
 		cout << endl;
-		afboard();
 		if (!firstsele) {
 			if (celltofind - cellfinds == 0) {
-				color(3);
-				cout << "Bravo!\nfin de partie";
-				color(4);
+				cout << "\033[1;34mBravo!\nfin de partie\033[0m";
 				end = true;
 			}
 			else
@@ -425,11 +504,10 @@ int main()
 				cout << celltofind - cellfinds << " cases restantes a trouver\nVotre derniere entree etait en x: " << x + 1 << ", y: " << y + 1 << endl;
 			}
 		}
+		afboard();
 		if (!end)
 		{
-			color(3);
-			cout << endl << "Demineur" << endl;
-			color(4);
+			cout << endl << "\033[1;34mDemineur\033[0m" << endl;
 			cout << "1. Decouvrire une case\n2. Poser un drapeau\n> ";
 			cin >> select;
 
@@ -466,9 +544,7 @@ int main()
 				cheatshowmine();
 				break;
 			default:
-				color(1);
-				cout << endl << "Erreur, saissie incorrect" << endl;
-				color(4);
+				cout << endl << "\033[1;31mErreur, saissie incorrect\033[0m" << endl;
 				break;
 			}
 		}
