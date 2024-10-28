@@ -8,6 +8,8 @@ struct celldata {
 	bool revealed;
 	bool mine;
 	bool flaged;
+	bool bonus;
+	bool malus;
 	int minesaround;
 };
 
@@ -26,6 +28,8 @@ int x = -1;
 int y = -1;
 int nbminemod = 0;
 bool ismodded = false;
+bool isbonus = false;
+bool ismalus = false;
 
 float gennbint(int nb1, int nb2) {
 	return floor(nb1 + ((rand() / (float)RAND_MAX) * nb2));
@@ -534,10 +538,21 @@ int main()
 			}
 			break;
 		default:
-			cout << endl << "\033[1;31mErreur, saissie incorrect\033[0m" << endl << endl;
+			cout << endl << "\033[1;31mErreur, saissie incorrect\033[0m" << endl;
 			i--;
 			break;
 		}
+	}
+	cout << "Voulez vous des cases bonus ? (y/n)" << endl;
+	cin << 
+
+	if (isbonus)
+	{
+
+	}
+	else if (ismalus)
+	{
+
 	}
 
 	switch (boardsize)
