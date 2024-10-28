@@ -22,8 +22,8 @@ enum bschoices {
 int celltofind = 0;
 int cellfinds = 0;
 int boardsize = 0;
-int x = 0;
-int y = 0;
+int x = -1;
+int y = -1;
 int nbminemod = 0;
 bool ismodded = false;
 
@@ -303,6 +303,10 @@ void afboard() {
 					cout << "\033[1;31;102m[" << "F" << "]\033[0m";
 				}
 			} 
+			else if (x1 == x && y1 == y)
+			{
+				cout << "\033[1;30;47m[" << "?" << "]\033[0m";
+			}
 			else
 			{
 				cout << "\033[1;30;102m[" << "?" << "]\033[0m";
@@ -315,7 +319,7 @@ void afboard() {
 void checkcell(int x, int y) {
 	for (int i = -1; i <= 1; ++i) {
 		for (int j = -1; j <= 1; ++j) {
-			int combi = i * 10 + j;
+			//int combi = i * 10 + j;
 			if (y + i >= 0 && y + i < boardsize && x + j >= 0 && x + j < boardsize) {
 				if (gameboard[y][x].minesaround == 0) {
 					if (gameboard[y + i][x + j].minesaround == 0 && !gameboard[y + i][x + j].revealed)
@@ -568,7 +572,7 @@ int main()
 		if (!end)
 		{
 			cout << endl << "\033[1;34mDemineur\033[0m" << endl;
-			cout << "1. Decouvrire une case\n2. Poser un drapeau\n> ";
+			cout << "1. Decouvrir une case\n2. Poser/enlever un drapeau\n> ";
 			cin >> select;
 
 			switch (select)
