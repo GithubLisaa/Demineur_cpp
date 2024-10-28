@@ -51,12 +51,10 @@ float gennbint(int nb1, int nb2) {
 //		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 //		break;
 //	}
+//Ca c'est mieux =>	std::cout << "\033[<style>;<couleurtexte>;<background>mTexte\033[0m" << std::endl;
 //}
 
-//std::cout << "\033[<style>;<couleurtexte>;<background>mTexte\033[0m" << std::endl;
-
-
-void cheatshowmine() {
+void cheat() {
 	int nbmineonboard = 0;
 	for (int y = 0; y < boardsize; y++)
 	{
@@ -68,7 +66,7 @@ void cheatshowmine() {
 				nbmineonboard++;
 			}
 			else if (gameboard[y][x].revealed) {
-				if (gameboard[y][x].minesaround > 0) {
+				if (gameboard[y][x].minesaround > 0 && !gameboard[y][x].bonus && !gameboard[y][x].malus) {
 					switch (gameboard[y][x].minesaround)
 					{
 					case 1:
@@ -97,21 +95,29 @@ void cheatshowmine() {
 						break;
 					}
 				}
+				else if (gameboard[y][x].bonus)
+				{
+					cout << "\033[1;36;103m[B]\033[0m";
+				}
+				else if (gameboard[y][x].malus)
+				{
+					cout << "\033[1;31;103m[M]\033[0m";
+				}
 				else
 				{
-					cout << "\033[1;30;103m[" << " " << "]\033[0m";
+					cout << "\033[1;30;103m[ ]\033[0m";
 				}
 			}
 			else
 			{
-				if (gameboard[y][x].minesaround > 0) {
+				if (gameboard[y][x].minesaround > 0 && !gameboard[y][x].bonus && !gameboard[y][x].malus) {
 					switch (gameboard[y][x].minesaround)
 					{
 					case 1:
 						cout << "\033[1;34;102m[" << gameboard[y][x].minesaround << "]\033[0m";
 						break;
 					case 2:
-						cout << "\033[1;32;102m[" << gameboard[y][x].minesaround << "]\033[0m";
+						cout << "\033[1;33;102m[" << gameboard[y][x].minesaround << "]\033[0m";
 						break;
 					case 3:
 						cout << "\033[1;31;102m[" << gameboard[y][x].minesaround << "]\033[0m";
@@ -133,9 +139,17 @@ void cheatshowmine() {
 						break;
 					}
 				}
+				else if (gameboard[y][x].bonus)
+				{
+					cout << "\033[1;36;102m[B]\033[0m";
+				}
+				else if (gameboard[y][x].malus)
+				{
+					cout << "\033[1;31;102m[M]\033[0m";
+				}
 				else
 				{
-					cout << "\033[1;30;102m[" << " " << "]\033[0m";
+					cout << "\033[1;30;102m[ ]\033[0m";
 				}
 			}
 		}
@@ -211,6 +225,53 @@ void iniboard() {
 					}
 				}
 			}
+		}
+	}
+}
+
+void iniboma() {
+	int x = 0;
+	int y = 0;
+	int bo = 0;
+	int nbi = 0;
+
+	if (ismalus && isbonus)
+	{
+		nbi = 2;
+		bo = 1;
+	}
+	else if (isbonus || ismalus)
+	{
+		nbi = 1;
+		if (isbonus)
+		{
+			bo = 1;
+		}
+	}
+	else
+	{
+		return;
+	}
+
+	for (int i = 0; i < nbi; i++)
+	{
+		x = gennbint(0, boardsize);
+		y = gennbint(0, boardsize);
+
+		if (!gameboard[y][x].revealed && !gameboard[y][x].mine && !gameboard[y][x].bonus && !gameboard[y][x].malus) {
+			if (bo == 1)
+			{
+				gameboard[y][x].bonus = true;
+				bo--;
+			}
+			else
+			{
+				gameboard[y][x].malus = true;
+			}
+		}
+		else
+		{
+			i--;
 		}
 	}
 }
@@ -469,6 +530,10 @@ bool editcell(int type) {
 		{
 			cout << endl << "\033[1;31mErreur, case deja decouverte\033[0m" << endl;
 		}
+		else if (gameboard[y][x].bonus)
+		{
+			//on fait en sorte que la case ne soit "activer" que par le joueur ou si la fonction checkcell la devouvre, elle se fasse aussi activer (pareil pour les malus)
+		}
 		else {
 			checkcell(x, y);
 		}
@@ -490,6 +555,7 @@ int main()
 	int select = 0;
 	bool end = false;
 	bool firstsele = true;
+	char y_n;
 
 	gennbint(0, 0);
 	gennbint(0, 0);
@@ -511,7 +577,6 @@ int main()
 			boardsize = GRAND;
 			break;
 		case 4:
-			char seeda;
 			int seedmod;
 			int maxmines;
 			ismodded = true;
@@ -530,8 +595,8 @@ int main()
 				nbminemod = maxmines;
 			}
 			cout << "Voulez vous rentrer une seed custom ? (y/n)\n> ";
-			cin >> seeda;
-			if (seeda == 'y') {
+			cin >> y_n;
+			if (y_n == 'y') {
 				cout << "Entrer votre seed\n> ";
 				cin >> seedmod;
 				srand(seedmod);
@@ -543,16 +608,17 @@ int main()
 			break;
 		}
 	}
-	cout << "Voulez vous des cases bonus ? (y/n)" << endl;
-	cin << 
-
-	if (isbonus)
+	cout << "Voulez vous des cases bonus ? (y/n)\n> " << endl;
+	cin >> y_n;
+	if (y_n == 'y')
 	{
-
+		isbonus = true;
 	}
-	else if (ismalus)
+	cout << "Voulez vous des cases malus ? (y/n)\n> " << endl;
+	cin >> y_n;
+	if (y_n == 'y')
 	{
-
+		ismalus = true;
 	}
 
 	switch (boardsize)
@@ -581,7 +647,7 @@ int main()
 			}
 			else
 			{
-				cout << "Votre derniere entree est en: \033[1;34;47m[x: " << x + 1 << ", y: " << y + 1 << "]\033[0m\n" << celltofind - cellfinds << " cases restantes a trouver" << endl;
+				cout << "Votre derniere entree est en: \033[1;31;47m[x: " << x + 1 << ", y: " << y + 1 << "]\033[0m\n" << celltofind - cellfinds << " cases restantes a trouver" << endl;
 			}
 		}
 		if (!end)
@@ -603,6 +669,7 @@ int main()
 					editcell(3);
 					iniboard();
 					checkcell(x, y);
+					iniboma();
 					firstsele = false;
 				}
 				else
@@ -620,7 +687,7 @@ int main()
 				editcell(1);
 				break;
 			case 3:
-				cheatshowmine();
+				cheat();
 				break;
 			default:
 				cout << endl << "\033[1;31mErreur, saissie incorrect\033[0m" << endl;
