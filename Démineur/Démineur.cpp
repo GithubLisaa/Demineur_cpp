@@ -276,111 +276,6 @@ void iniboma() {
 	}
 }
 
-void afboard() {
-	cellfinds = 0;
-	for (int y1 = 0; y1 < boardsize; y1++)
-	{
-		for (int x1 = 0; x1 < boardsize; x1++)
-		{
-			if (gameboard[y1][x1].revealed)
-			{
-				if (gameboard[y1][x1].minesaround > 0) {
-					if (x1 == x && y1 == y)
-					{
-						switch (gameboard[y1][x1].minesaround)
-						{
-						case 1:
-							cout << "\033[1;34;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 2:
-							cout << "\033[1;32;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 3:
-							cout << "\033[1;31;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 4:
-							cout << "\033[1;95;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 5:
-							cout << "\033[1;37;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 6:
-							cout << "\033[1;36;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 7:
-							cout << "\033[1;30;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						default:
-							cout << "\033[1;90;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						}
-					}
-					else
-					{
-						switch (gameboard[y1][x1].minesaround)
-						{
-						case 1:
-							cout << "\033[1;34;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 2:
-							cout << "\033[1;32;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 3:
-							cout << "\033[1;31;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 4:
-							cout << "\033[1;95;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 5:
-							cout << "\033[1;37;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 6:
-							cout << "\033[1;36;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						case 7:
-							cout << "\033[1;30;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						default:
-							cout << "\033[1;90;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
-							break;
-						}
-					}
-					cellfinds++;
-				}
-				else if (x1 == x && y1 == y)
-				{
-					cout << "\033[1;30;47m[" << " " << "]\033[0m";
-					cellfinds++;
-				} 
-				else
-				{
-					cout << "\033[1;30;103m[" << " " << "]\033[0m";
-					cellfinds++;
-				}
-			}
-			else if (gameboard[y1][x1].flaged) {
-				if (x1 == x && y1 == y)
-				{
-					cout << "\033[1;31;47m[" << "F" << "]\033[0m";
-				}
-				else
-				{
-					cout << "\033[1;31;102m[" << "F" << "]\033[0m";
-				}
-			} 
-			else if (x1 == x && y1 == y)
-			{
-				cout << "\033[1;30;47m[" << "?" << "]\033[0m";
-			}
-			else
-			{
-				cout << "\033[1;30;102m[" << "?" << "]\033[0m";
-			}
-		}
-		cout << endl;
-	}
-}
-
 void checkcell(int x, int y) {
 	for (int i = -1; i <= 1; ++i) {
 		for (int j = -1; j <= 1; ++j) {
@@ -460,6 +355,186 @@ void checkcell(int x, int y) {
 	}
 }
 
+void bonusmalus(int type, int nbcelltorev_minestoplace) {
+	int x = 0;
+	int y = 0;
+	int bo = 0;
+
+	switch (type)
+	{
+	case 1:
+		if (celltofind - cellfinds > nbcelltorev_minestoplace) {
+			for (int i = 0; i < nbcelltorev_minestoplace; i++)
+			{
+				x = gennbint(0, boardsize);
+				y = gennbint(0, boardsize);
+
+				if (!gameboard[y][x].revealed && !gameboard[y][x].mine) {
+					gameboard[y][x].revealed = true;
+					if (gameboard[y][x].minesaround == 0)
+					{
+						checkcell(x, y);
+					}
+				}
+				else
+				{
+					i--;
+				}
+			}
+			cout << "Vous avez trouver une case bonus, " << nbcelltorev_minestoplace << " cases \"safe\" ont ete reveler" << endl;
+		}
+		else
+		{
+			cout << "Vous avez trouver un bonus, mais il y a trop peu de cases \"safe\" restantes" << endl;
+		}
+		break;
+	default:
+		if (celltofind - cellfinds > nbcelltorev_minestoplace) {
+			for (int i = 0; i < nbcelltorev_minestoplace; i++)
+			{
+				x = gennbint(0, boardsize);
+				y = gennbint(0, boardsize);
+
+				if (!gameboard[y][x].revealed && !gameboard[y][x].mine) {
+					gameboard[y][x].mine = true;
+				}
+				else
+				{
+					i--;
+				}
+			}
+			cout << "Vous avez trouver une case malus, " << nbcelltorev_minestoplace << " mines ont ete ajouter" << endl;
+			celltofind -= nbcelltorev_minestoplace;
+			for (int y = 0; y < boardsize; y++)
+			{
+				for (int x = 0; x < boardsize; x++)
+				{
+					gameboard[y][x].minesaround = 0;
+					for (int j = -1; j <= 1; ++j) {
+						for (int k = -1; k <= 1; ++k) {
+							if (y + j >= 0 && y + j < boardsize && x + k >= 0 && x + k < boardsize) {
+								if (gameboard[y + j][x + k].mine) {
+									gameboard[y][x].minesaround++;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			cout << "Vous avez trouver un malus, mais il y a trop peu de cases \"safe\" restantes pour les ajouters" << endl;
+		}
+		break;
+	}
+}
+
+void afboard() {
+	cellfinds = 0;
+	for (int y1 = 0; y1 < boardsize; y1++)
+	{
+		for (int x1 = 0; x1 < boardsize; x1++)
+		{
+			if (gameboard[y1][x1].revealed)
+			{
+				if (gameboard[y1][x1].minesaround > 0) {
+					if (x1 == x && y1 == y)
+					{
+						switch (gameboard[y1][x1].minesaround)
+						{
+						case 1:
+							cout << "\033[1;34;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 2:
+							cout << "\033[1;32;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 3:
+							cout << "\033[1;31;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 4:
+							cout << "\033[1;95;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 5:
+							cout << "\033[1;36;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 6:
+							cout << "\033[1;36;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 7:
+							cout << "\033[1;30;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						default:
+							cout << "\033[1;90;47m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						}
+					}
+					else
+					{
+						switch (gameboard[y1][x1].minesaround)
+						{
+						case 1:
+							cout << "\033[1;34;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 2:
+							cout << "\033[1;32;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 3:
+							cout << "\033[1;31;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 4:
+							cout << "\033[1;95;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 5:
+							cout << "\033[1;36;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 6:
+							cout << "\033[1;36;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						case 7:
+							cout << "\033[1;30;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						default:
+							cout << "\033[1;90;103m[" << gameboard[y1][x1].minesaround << "]\033[0m";
+							break;
+						}
+					}
+					cellfinds++;
+				}
+				else if (x1 == x && y1 == y)
+				{
+					cout << "\033[1;30;47m[" << " " << "]\033[0m";
+					cellfinds++;
+				} 
+				else
+				{
+					cout << "\033[1;30;103m[" << " " << "]\033[0m";
+					cellfinds++;
+				}
+			}
+			else if (gameboard[y1][x1].flaged) {
+				if (x1 == x && y1 == y)
+				{
+					cout << "\033[1;31;47m[" << "F" << "]\033[0m";
+				}
+				else
+				{
+					cout << "\033[1;31;102m[" << "F" << "]\033[0m";
+				}
+			} 
+			else if (x1 == x && y1 == y)
+			{
+				cout << "\033[1;30;47m[" << "?" << "]\033[0m";
+			}
+			else
+			{
+				cout << "\033[1;30;102m[" << "?" << "]\033[0m";
+			}
+		}
+		cout << endl;
+	}
+}
+
 bool editcell(int type) {
 	if (x > boardsize) {
 		x = boardsize - 1;
@@ -532,7 +607,13 @@ bool editcell(int type) {
 		}
 		else if (gameboard[y][x].bonus)
 		{
-			//on fait en sorte que la case ne soit "activer" que par le joueur ou si la fonction checkcell la devouvre, elle se fasse aussi activer (pareil pour les malus)
+			gameboard[y][x].revealed = true;
+			bonusmalus(1, 3);
+		}
+		else if (gameboard[y][x].malus)
+		{
+			gameboard[y][x].revealed = true;
+			bonusmalus(2, 3);
 		}
 		else {
 			checkcell(x, y);
@@ -556,6 +637,7 @@ int main()
 	bool end = false;
 	bool firstsele = true;
 	char y_n;
+	int maxmines;
 
 	gennbint(0, 0);
 	gennbint(0, 0);
@@ -578,7 +660,6 @@ int main()
 			break;
 		case 4:
 			int seedmod;
-			int maxmines;
 			ismodded = true;
 			cout << "Entrer votre taille de tableau personnalisee (max 9999*9999, min 6*6)\n> ";
 			cin >> boardsize;
@@ -608,17 +689,57 @@ int main()
 			break;
 		}
 	}
-	cout << "Voulez vous des cases bonus ? (y/n)\n> " << endl;
+	cout << "Voulez vous une cases bonus ? (y/n)\n> " << endl;
 	cin >> y_n;
 	if (y_n == 'y')
 	{
-		isbonus = true;
+		if (ismodded)
+		{
+			if ((nbminemod + 4) < maxmines)
+			{
+				isbonus = true;
+			}
+			else
+			{
+				cout << "Pas asser de place pour le bonus" << endl;
+			}
+		}
+		else
+		{
+			isbonus = true;
+		}
 	}
-	cout << "Voulez vous des cases malus ? (y/n)\n> " << endl;
+	cout << "Voulez vous une cases malus ? (y/n)\n> " << endl;
 	cin >> y_n;
 	if (y_n == 'y')
 	{
-		ismalus = true;
+		if (ismodded)
+		{
+			if (isbonus)
+			{
+				if ((nbminemod + 7) < maxmines)
+				{
+					ismalus = true;
+				}
+				else
+				{
+
+					cout << "Pas asser de place pour le bonus et le malus" << endl;
+				}
+			}
+			else if ((nbminemod + 3) < maxmines)
+			{
+				ismalus = true;
+			}
+			else
+			{
+				cout << "Pas asser de place pour le malus" << endl;
+			}
+		}
+		else
+		{
+			ismalus = true;
+		}
 	}
 
 	switch (boardsize)
