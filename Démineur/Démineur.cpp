@@ -161,25 +161,20 @@ void cheat() {
 void iniboard() {
 	int totalmine = 0;
 
-	if (ismodded) {
-		totalmine = nbminemod;
-	}
-	else
+	switch (boardsize)
 	{
-		switch (boardsize)
-		{
-		case 10:
-			totalmine = 10;
-			break;
-		case 18:
-			totalmine = 40;
-			break;
-		case 24:
-			totalmine = 99;
-			break;
-		default:
-			break;
-		}
+	case 10:
+		totalmine = 10;
+		break;
+	case 18:
+		totalmine = 40;
+		break;
+	case 24:
+		totalmine = 99;
+		break;
+	default:
+		totalmine = nbminemod;
+		break;
 	}
 
 	for (int i = 0; i < totalmine; i++)
